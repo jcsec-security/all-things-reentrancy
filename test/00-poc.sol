@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/00-basic_a.sol";
-import "../src/00-template_attacker_a.sol";
+import "../src/00-basic.sol";
+import "../src/00-template_attacker.sol";
 
 contract ProofOfConcept is Test {
 

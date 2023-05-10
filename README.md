@@ -40,7 +40,7 @@ forge remappings > remappings.txt
 
 You will find one vulnerable contract for each type of reentrancy bug currently covered. Each of them will have a template attacker contract named `0X-template_attacker.sol` ready for you to craft your own attacking contract. Finally, under `test/0X-poc.sol` you will find a test/PoC ready to fire your attacker contract. Proposed solutions can be found in `src/solutions/`... but not yet :innocent:
 
-- [Basic reentrancy](/src/00-basic_a.sol/)
+- [Basic reentrancy](/src/00-basic.sol/)
 - [Token-callback reentrancy](/src/01-tokenCallback.sol/)
 - [Cross-function reentrancy](/src/02-xFunction.sol/)
 - [Basic reentrancy with a twist](/src/02-basic_b.sol/)
@@ -57,12 +57,12 @@ This is the most basic type of reentrancy, the victim exposes the following func
 - `function userBalance (address user) public view returns (uint256)`
 
 
-Modify `src/00-template_sttacker_a.sol` to successfully pass the test found in `test/00-poc_a.sol` to proof the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
+Modify `src/00-template_sttacker.sol` to successfully pass the test found in `test/00-poc.sol` to proof the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
-forge test --match-path test/00-poc_a.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
+forge test --match-path test/00-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
 
 
