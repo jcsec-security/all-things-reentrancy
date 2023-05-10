@@ -1,9 +1,12 @@
 # All things reentrancy!
 
-This repo contains all the details to follow along with the "All things reentrancy" workshop/talk. The target audience includes both **smart contract developers** looking to improve their secure coding practices and **beginner auditors/security people** looking to get an overview on how to **identify basic examples** of the wider family of reentrancy bugs and **crafting your first exploit/proof of concept** for each of them.
+This repo contains all the details to follow along with the "All things reentrancy" workshop/talk. 
 
 
-If you are already a little bit more advanced on your Solidity security journey, this content may look too basic for you :).
+:star: The target audience includes both **smart contract developers** looking to improve their secure coding practices and **beginner auditors/security people** looking to get an overview on how to **identify basic examples** of the wider family of reentrancy bugs and **crafting your first exploit/proof of concept** for each of them.
+
+
+:point_right: If you are already a little bit ahead on your Solidity security journey, this content may be too basic for you :smiley:
 
 
 ## Foundry setup
@@ -19,7 +22,7 @@ cd myTestProject
 forge test # run the current tests
 ```
 
-If the above tests were successful, your Foundry instance is ready for the workshop.
+If the above tests were successful, your Foundry instance is ready for the workshop :heavy_check_mark:
 
 
 ## Workshop
@@ -35,7 +38,7 @@ This is enough for foundry to recognize the mappings and successfully compile bu
 forge remappings > remappings.txt
 ```
 
-You will find one vulnerable contract for each type of reentrancy bug currently covered. Each of them will have a template attacker contract named `0X-template_attacker.sol` ready for you to craft your own attacking contract. Finally, under `test/0X-poc.sol` you will find a test/PoC ready to fire your attacker contract. Proposed solutions can be found in `src/solutions/`... but not yet :).
+You will find one vulnerable contract for each type of reentrancy bug currently covered. Each of them will have a template attacker contract named `0X-template_attacker.sol` ready for you to craft your own attacking contract. Finally, under `test/0X-poc.sol` you will find a test/PoC ready to fire your attacker contract. Proposed solutions can be found in `src/solutions/`... but not yet :innocent:
 
 - [Basic reentrancy](/src/00-basic_a.sol/)
 - [Token-callback reentrancy](/src/01-tokenCallback.sol/)
@@ -57,7 +60,7 @@ This is the most basic type of reentrancy, the victim exposes the following func
 Modify `src/00-template_sttacker_a.sol` to successfully pass the test found in `test/00-poc_a.sol` to proof the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
 
 
-Use the following line to run the test and check the success of your proof of concept:
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/00-poc_a.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
@@ -69,7 +72,9 @@ Here we have a basic ERC-721 implementation that exposes just one relevant funct
 - `function mint() external payable`
 
 
-Modify `src/01-template_attacker.sol` to successfully pass the test found in `test/01-poc.sol` to proof the success of your attack. Use the following line to run the test and check the success of your proof of concept:
+Modify `src/01-template_attacker.sol` to successfully pass the test found in `test/01-poc.sol` to proof the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/01-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
@@ -82,7 +87,9 @@ The target contract is very similar to the 00 example, however, the vulnerable f
 - `function withdraw() external nonReentrant()`
 - `function transferTo(address _recipient, uint _amount) external`
 
-Modify `src/02-template_attacker.sol` to successfully pass the test found in `test/02-poc.sol` to proof the success of your attack. Use the following line to run the test and check the success of your proof of concept:
+Modify `src/02-template_attacker.sol` to successfully pass the test found in `test/02-poc.sol` to proof the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/02-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
@@ -97,7 +104,9 @@ This example is a simplified implementation of a tokenized vault, which increase
 - `function unstake(uint256 amount) external returns (uint256)`
 
 
-Modify `src/00-template_attacker_b.sol` to successfully pass the test found in `test/00-poc_b.sol` to proof the success of your attack. Use the following line to run the test and check the success of your proof of concept:
+Modify `src/00-template_attacker_b.sol` to successfully pass the test found in `test/00-poc_b.sol` to proof the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/00-poc_b.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
@@ -113,7 +122,9 @@ The idea is similar to the previous one, however, instead of book-keeping each d
 The auxiliary token contract includes a `burnAll()` function that allows the burned to burn the whole balance of a given user.
 
 
-Modify `src/03-template_attacker.sol` to successfully pass the test found in `test/03-poc.sol` to proof the success of your attack. Use the following line to run the test and check the success of your proof of concept:
+Modify `src/03-template_attacker.sol` to successfully pass the test found in `test/03-poc.sol` to proof the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/03-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
@@ -128,7 +139,9 @@ The last one depicts a Liquidity pool ETH-stETH that is used as data source by a
 - `function getSpotPriceEth(uint256 amount) public view returns (uint256)`
 
 
-Modify `src/04-template_attacker.sol` to successfully pass the test found in `test/04-poc.sol` to proof the success of your attack. Use the following line to run the test and check the success of your proof of concept:
+Modify `src/04-template_attacker.sol` to successfully pass the test found in `test/04-poc.sol` to proof the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
 forge test --match-path test/04-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
