@@ -104,11 +104,11 @@ This example is a simplified implementation of a tokenized vault, which increase
 - `function unstake(uint256 amount) external returns (uint256)`
 
 
-Modify `src/00-template_attacker_b.sol` to successfully pass the test found in `test/00-poc_b.sol` to proof the success of your attack. 
+Modify `src/02-template_attacker_b.sol` to successfully pass the test found in `test/02-poc_b.sol` to proof the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
-forge test --match-path test/00-poc_b.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
+forge test --match-path test/02-poc_b.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
 
 
