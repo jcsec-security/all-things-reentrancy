@@ -1,6 +1,6 @@
 # All things reentrancy!
 
-This repo contains all the details to follow along with the "All things reentrancy" workshop/talk. 
+This repo contains all the details to follow along with the "All things reentrancy" workshop/talk. Check the YT recording of the live session with the Calyptus community [here](https://www.youtube.com/watch?v=vR98s7W-aX4).
 
 
 :star: The target audience includes both **smart contract developers** looking to improve their secure coding practices and **beginner auditors/security people** looking to get an overview on how to **identify basic examples** of the wider family of reentrancy bugs and **crafting your first exploit/proof of concept** for each of them.
