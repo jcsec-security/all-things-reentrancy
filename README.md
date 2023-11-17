@@ -11,7 +11,7 @@ This repo contains all the details to follow along with the "All things reentran
 
 ## Foundry setup
 
-All the exploitation tests aka Proof of Concept (PoC) will be done using foundry. It does not matter if you are not familiar with the tool as we will use just a fraction of its capabilities for testing basic scenarios and the tests cases, written in solidity,  are provided as part of the exercise so participants can just focus on the attacker contracts.
+All the exploitation tests aka Proof of Concept (PoC) will be done using foundry. It does not matter if you are not familiar with the tool as we will use just a fraction of its capabilities for testing basic scenarios and the test cases, written in solidity,  are provided as part of the exercise so participants can just focus on the attacker contracts.
 
 
 First and foremost, install Foundry following [these details](https://github.com/foundry-rs/foundry#installation). After the successful installation, please run the following to check that everything is in place:
@@ -29,8 +29,12 @@ If the above tests were successful, your Foundry instance is ready for the works
 
 First and foremost, clone this repo, cd into the dir and install the following dependencies:
 ```sh
-forge install openzeppelin/openzeppelin-contracts # downloads the latest version of the OZ contracts under the lib directory
-forge remappings # List current remappings, should already include the OZ ones we just download at the bottom
+# Download the latest version of the Foundry std library under /lib
+forge install foundry-rs/forge-std
+# Download the latest version of the OZ contracts under /lib
+forge install openzeppelin/openzeppelin-contracts
+# List current remappings, which should already include the above
+forge remappings 
 ```
 
 This is enough for foundry to recognize the mappings and successfully compile but let’s add one more thing so VS code stops showing the import error
@@ -57,7 +61,7 @@ This is the most basic type of reentrancy, the victim exposes the following func
 - `function userBalance (address user) public view returns (uint256)`
 
 
-Modify `src/00-template_sttacker.sol` to successfully pass the test found in `test/00-poc.sol` to proof the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
+Modify `src/00-template_sttacker.sol` to successfully pass the test found in `test/00-poc.sol` to prove the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
@@ -72,7 +76,7 @@ Here we have a basic ERC-721 implementation that exposes just one relevant funct
 - `function mint() external payable`
 
 
-Modify `src/01-template_attacker.sol` to successfully pass the test found in `test/01-poc.sol` to proof the success of your attack. 
+Modify `src/01-template_attacker.sol` to successfully pass the test found in `test/01-poc.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -80,14 +84,14 @@ forge test --match-path test/01-poc.sol -vvv # If you add a fourth v (-vvvv) you
 ```
 
 
-### 02 Cross function reentrancy
+### 02 Cross-function reentrancy
 
-The target contract is very similar to the 00 example, however, the vulnerable function is now marked as `nonReentrant`. A new feature to move funds has also been added!
+The target contract is very similar to example `00`, however, the vulnerable function is now marked as `nonReentrant`. A new feature to move funds has also been added!
 - `function deposit() external payable`
 - `function withdraw() external nonReentrant()`
 - `function transferTo(address _recipient, uint _amount) external`
 
-Modify `src/02-template_attacker.sol` to successfully pass the test found in `test/02-poc.sol` to proof the success of your attack. 
+Modify `src/02-template_attacker.sol` to successfully pass the test found in `test/02-poc.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -104,7 +108,7 @@ This example is a simplified implementation of a tokenized vault, which increase
 - `function unstake(uint256 amount) external returns (uint256)`
 
 
-Modify `src/02-template_attacker_b.sol` to successfully pass the test found in `test/02-poc_b.sol` to proof the success of your attack. 
+Modify `src/02-template_attacker_b.sol` to successfully pass the test found in `test/02-poc_b.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -112,7 +116,7 @@ forge test --match-path test/02-poc_b.sol -vvv # If you add a fourth v (-vvvv) y
 ```
 
 
-### 03 Cross contract reentrancy
+### 03 Cross-contract reentrancy
 
 The idea is similar to the previous one, however, instead of book-keeping each deposited eth a stEth ERC-20 token is minted. Also... every function is `nonReentrant`.
 - `function stake() external payable nonReentrant()`
@@ -122,7 +126,7 @@ The idea is similar to the previous one, however, instead of book-keeping each d
 The auxiliary token contract includes a `burnAll()` function that allows the burned to burn the whole balance of a given user.
 
 
-Modify `src/03-template_attacker.sol` to successfully pass the test found in `test/03-poc.sol` to proof the success of your attack. 
+Modify `src/03-template_attacker.sol` to successfully pass the test found in `test/03-poc.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -130,16 +134,16 @@ forge test --match-path test/03-poc.sol -vvv # If you add a fourth v (-vvvv) you
 ```
 
 
-### 04 Read only reentrancy
+### 04 Read-only reentrancy
 
-The last one depicts a Liquidity pool ETH-stETH that is used as data source by a Lending protocol (check `src/periphery/reader_lender.sol`). Every function is `nonReentrant` and have external interactions in the last place.
+The last one depicts a Liquidity pool ETH-stETH that is used as a data source by a Lending protocol (check `src/periphery/reader_lender.sol`). Every function is `nonReentrant` and has external interactions in the last place.
 - `function addLiquidity(uint256 stEth_amount, uint256 eth_amount) external payable nonReentrant() returns (uint256)`
 - `function removeLiquidity(uint256 lp_amount) external nonReentrant() returns (uint256, uint256)`
 - `function getSpotPriceStEth(uint256 amount) public view returns (uint256)`
 - `function getSpotPriceEth(uint256 amount) public view returns (uint256)`
 
 
-Modify `src/04-template_attacker.sol` to successfully pass the test found in `test/04-poc.sol` to proof the success of your attack. 
+Modify `src/04-template_attacker.sol` to successfully pass the test found in `test/04-poc.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
