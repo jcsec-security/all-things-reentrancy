@@ -21,12 +21,12 @@ contract ReaderLender is ReentrancyGuard () {
 	uint256 private constant FEE_PERCENTAGE = 5;
 	uint256 private constant OVERCOLLATERALLIZATION_PERCENTAGE = 150;
 	mapping(address => Loan) public loans;
-	IERC20 public atrToken;
+	IERC20 public stEthToken;
 	ILiquidityPool public pool;
 
 
 	constructor(address token_address, address _pool) {
-		atrToken = IERC20(token_address);
+		stEthToken = IERC20(token_address);
 		pool = ILiquidityPool(_pool); // Is this a trusted source? will it have vulnerabilities?
 	}	
 
@@ -41,7 +41,7 @@ contract ReaderLender is ReentrancyGuard () {
 		require(msg.value >= collateral_with_fee, "Not enough collateral");
 		
 		loans[msg.sender] = Loan(amount, required_collateral);
-		atrToken.transfer(msg.sender, amount);
+		stEthToken.transfer(msg.sender, amount);
 	}
 
 	function repay() external payable {
@@ -51,7 +51,7 @@ contract ReaderLender is ReentrancyGuard () {
 		uint256 eth_to_return = loans[msg.sender].collateral;
 		delete loans[msg.sender];
 
-		atrToken.transferFrom(msg.sender, address(this), steth_lent);
+		stEthToken.transferFrom(msg.sender, address(this), steth_lent);
 
 		(bool success, ) = payable(msg.sender).call{value: eth_to_return}("");
 		require(success, "Repay's transfer failed");
