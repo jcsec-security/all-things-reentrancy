@@ -14,7 +14,7 @@ This repo contains all the details to follow along with the "All things reentran
 All the exploitation tests aka Proof of Concept (PoC) will be done using foundry. It does not matter if you are not familiar with the tool as we will use just a fraction of its capabilities for testing basic scenarios and the test cases, written in solidity,  are provided as part of the exercise so participants can just focus on the attacker contracts.
 
 
-First and foremost, install Foundry following [these details](https://github.com/foundry-rs/foundry#installation). After the successful installation, please run the following to check that everything is in place:
+First and foremost, install Foundry following [these details](https://book.getfoundry.sh/getting-started/installation). After the successful installation, please run the following to check that everything is in place:
 ```sh
 foundryup # look for updates
 forge init myTestProject # Create a foundry template project
