@@ -20,17 +20,20 @@ contract ProofOfConcept is Test {
         address alice = address(0x0);
         address bob = address(0x1);
         address charles = address(0x2);
+
         // Labelling for test traces
         vm.label(address(victim), "victim_contract");         
         vm.label(address(attacker), "attacker_contract");
         vm.label(alice, "alice");
         vm.label(bob, "bob");
         vm.label(charles, "charles");
+
         // Funding both parties
         vm.deal(address(attacker), 1 ether); // It is not necessary to fund the attacker as you could just send eth along, but still
         vm.deal(alice, USR_PARTICIPATION);
         vm.deal(bob, USR_PARTICIPATION);
-        vm.deal(charles, USR_PARTICIPATION);       
+        vm.deal(charles, USR_PARTICIPATION);   
+
         // Simulare legitimate users's usage
         vm.prank(alice);
         victim.deposit{value: USR_PARTICIPATION}();
@@ -47,11 +50,15 @@ contract ProofOfConcept is Test {
         vm.prank(charles);
         shares = victim.stake(USR_PARTICIPATION);  
         console.log("[>] Charles got %s shares", toEth(shares));
-        // Simulate rewards accrued by the protocol "somhow" (staking rew, donations, etc)
-        console.log("[>] Random donation of %s eth", toEth(address(victim).balance));
+
+        // Simulate rewards accrued by the protocol "somehow" (staking rew, donations, etc)
+        console.log("[>] Random donation of 10 eth");
         (bool success, ) = address(victim).call{value: USR_PARTICIPATION}(""); 
         require(success, "Transfer failed.");
-        console.log("[>] Contract's balance %s eth", toEth(address(victim).balance));              
+
+        // Init scenario
+        uint price = victim.getValueOfShares(1 ether); // Considering that shares has the same decs as ETH
+        console.log("[>] Share price: %s eth", toEth(price));              
     }
 
     // Foundry tests should start with the word "test" to be recognized as such
