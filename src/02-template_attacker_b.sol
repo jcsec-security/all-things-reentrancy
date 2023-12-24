@@ -3,10 +3,14 @@ pragma solidity ^0.8.13;
 
 
 interface IVulnerable {
-    function withdrawAll() external;
-	function withdrawSome(uint256 amount) external;
     function deposit() external payable;
-    function isUserVip (address user) external view returns (bool);
+    function withdraw(uint256 amount) external;
+    function stake(uint256 amount) external returns (uint256);
+    function unstake(uint256 amount) external returns (uint256);
+    function userBalance(address _user) external view returns (uint256);
+    function userStake(address _user) external view returns (uint256);
+    function getValueOfShares(uint256 amount) external view returns (uint256);
+    function getSharesOfValue(uint256 amount) external view returns (uint256);
 }
 
 
