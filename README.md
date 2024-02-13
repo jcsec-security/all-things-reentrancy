@@ -130,7 +130,7 @@ forge test --match-path test/04_1-poc.sol -vvv # If you add a fourth v (-vvvv) y
 ```
 
 
-### 04_1 Basic reentrancy subtracting, more comlex
+### 04_2 Basic reentrancy subtracting, more comlex
 
 This example is a simplified implementation of a tokenized vault, which increases the user shares when eth is locked in the contract. It exposes the following functions:
 - `function deposit() external payable`
