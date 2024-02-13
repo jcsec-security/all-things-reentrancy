@@ -2,20 +2,18 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/02-basic_b.sol";
-import "../src/02-template_attacker_b.sol";
-
+import "../src/04_1-subtraction.sol";
+import "../src/04_1-template_attacker.sol";
 
 contract ProofOfConcept is Test {
 
-    Vulnerable_ERC4626 public victim;
+    Vulnerable public victim;
     Attacker public attacker;
-    uint256 public constant USR_PARTICIPATION = 10 ether;
 
     // The setUp() function will be run before each test to set the initial scenario
     function setUp() public {
         // Declaring our contracts
-        victim = new Vulnerable_ERC4626();
+        victim = new Vulnerable();
         attacker = new Attacker(address(victim));
         address alice = address(0x0);
         address bob = address(0x1);
@@ -30,35 +28,26 @@ contract ProofOfConcept is Test {
 
         // Funding both parties
         vm.deal(address(attacker), 1 ether); // It is not necessary to fund the attacker as you could just send eth along, but still
-        vm.deal(alice, USR_PARTICIPATION);
-        vm.deal(bob, USR_PARTICIPATION);
-        vm.deal(charles, USR_PARTICIPATION);   
+        vm.deal(alice, 1 ether);
+        vm.deal(bob, 2 ether);
+        vm.deal(charles, 3 ether);   
 
         // Simulare legitimate users's usage
         vm.prank(alice);
-        victim.deposit{value: USR_PARTICIPATION}();
+        victim.deposit{value: 1 ether}();
         vm.prank(alice);
-        uint shares = victim.stake(USR_PARTICIPATION);
-        console.log("[>] Alice got %s shares", toEth(shares));
+        victim.claimKing();
+        console.log("[>] Alice is the Queen");
         vm.prank(bob);
-        victim.deposit{value: USR_PARTICIPATION}();
+        victim.deposit{value: 2 ether}();
         vm.prank(bob);
-        shares = victim.stake(USR_PARTICIPATION);
-        console.log("[>] Bob got %s shares", toEth(shares));
+        victim.claimKing();
+        console.log("[>] Bob is the king");
         vm.prank(charles);
-        victim.deposit{value: USR_PARTICIPATION}();
+        victim.deposit{value: 3 ether}();
         vm.prank(charles);
-        shares = victim.stake(USR_PARTICIPATION);  
-        console.log("[>] Charles got %s shares", toEth(shares));
-
-        // Simulate rewards accrued by the protocol "somehow" (staking rew, donations, etc)
-        console.log("[>] Random donation of 10 eth");
-        (bool success, ) = address(victim).call{value: USR_PARTICIPATION}(""); 
-        require(success, "Transfer failed.");
-
-        // Init scenario
-        uint price = victim.getValueOfShares(1 ether); // Considering that shares has the same decs as ETH
-        console.log("[>] Share price: %s eth", toEth(price));              
+        victim.claimKing();
+        console.log("[>] Charles is the King");         
     }
 
     // Foundry tests should start with the word "test" to be recognized as such
@@ -67,21 +56,22 @@ contract ProofOfConcept is Test {
         console.log("--------------------------------------------------------");
         console.log(unicode"| => Victim's balance 🙂 %s 🙂", toEth(address(victim).balance));
         console.log(unicode"| => Attacker balance 👀 %s 👀", toEth(address(attacker).balance));  
+        console.log(unicode"| => Current King 👀 %s 👀", victim.whoIsTheKing().addr);
         console.log("--------------------------------------------------------"); 
 
         console.log(unicode"\n\t💥💥💥💥 EXPLOITING... 💥💥💥💥\n"); 
 
         attacker.exploit();
-        vm.roll(11);
-        attacker.getTheMoney();
 
-        // Conditions to fullfill - leaving just 1 wei sitting in the contract after finishing the reentrancy step
-        assertEq(address(attacker).balance, 40999999999999999959);
-        assertEq(address(victim).balance, 41); // You can drain the contract even more if you deposit more than 1 eth :)
+        // Conditions to fullfill
+        assertEq(victim.whoIsTheKing().addr, address(attacker));
 
         console.log("--------------------------------------------------------"); 
-        console.log(unicode"| => Victim's balance ☠  %s ☠", toEth(address(victim).balance));
-        console.log(unicode"| => Attacker balance 💯 %s 💯", toEth(address(attacker).balance));        
+        console.log(unicode"| => Victim's balance 👀 %s 👀", toEth(address(victim).balance));
+        console.log(unicode"| => Attacker balance 💯 %s 💯", 
+            toEth( address(attacker).balance + victim.userBalance(address(attacker)) )
+        );    
+        console.log(unicode"| => Current King 💯 %s 💯", victim.whoIsTheKing().addr);    
         console.log("--------------------------------------------------------");               
     }
 

@@ -80,7 +80,6 @@ contract Vulnerable_ERC4626 {
         return (out_stk * current_balance) / current_total_shares;
     }
 
-
 	function userBalance (address _user) public view returns (uint256) {
 		return balance[_user];
 	}

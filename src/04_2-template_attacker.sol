@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.13;
 
+import "forge-std/Test.sol"; //debug
 
 interface IVulnerable {
     function deposit() external payable;
@@ -17,6 +18,7 @@ interface IVulnerable {
 contract Attacker {
 
 	IVulnerable public target;
+    bool public retrieving;
 	
 	constructor(address _target) {
 		target = IVulnerable(_target);
@@ -33,10 +35,11 @@ contract Attacker {
             Your code goes here!
         */
     }
-    
+
     function getTheMoney() external returns (uint256) {
         /*
             Your code goes here!
         */
     }
+    
 }

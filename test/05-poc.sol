@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/04-readOnly.sol";
-import "../src/04-template_attacker.sol";
+import "../src/05-readOnly.sol";
+import "../src/05-template_attacker.sol";
 import "../src/periphery_contracts/reader_lender.sol";
 import "../src/periphery_contracts/steth_token.sol";
 import "../src/periphery_contracts/lp_token.sol";

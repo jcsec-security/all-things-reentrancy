@@ -35,7 +35,6 @@ contract Attacker {
 
 
     receive() external payable {
-        
         /*
             Your code goes here!
         */
@@ -45,7 +44,7 @@ contract Attacker {
     function exploit() public payable {
         /*
             Your code goes here!
-        */      
+        */
     }
 
 }

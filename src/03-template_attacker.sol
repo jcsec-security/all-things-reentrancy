@@ -6,8 +6,8 @@ import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 
 interface IVulnerable {
-    function stake() external payable;
-    function unstake() external;	
+    function deposit() external payable;
+    function withdraw() external;	
 }
 
 interface ISidekick {
@@ -32,8 +32,7 @@ contract Attacker {
 		sidekick = ISidekick(_sidekick);
 	}
 
-    receive() external payable {
-        
+    receive() external payable {     
         /*
             Your code goes here!
         */

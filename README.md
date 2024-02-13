@@ -47,9 +47,10 @@ You will find one vulnerable contract for each type of reentrancy bug currently 
 - [Basic reentrancy](/src/00-basic.sol/)
 - [Token-callback reentrancy](/src/01-tokenCallback.sol/)
 - [Cross-function reentrancy](/src/02-xFunction.sol/)
-- [Basic reentrancy with a twist](/src/02-basic_b.sol/)
 - [Cross-contract reentrancy](/src/03-xContract.sol/)
-- [Read only reentrancy](/src/04-readOnly.sol/)
+- [Basic reentrancy subtracting](/src/04-1_subtraction.sol/)
+- [Basic reentrancy subtracting - more complex](/src/04-2_subtraction.sol/)
+- [Read only reentrancy](/src/05-readOnly.sol/)
 
 
 ### 00 Basic reentrancy
@@ -60,9 +61,7 @@ This is the most basic type of reentrancy, the victim exposes the following func
 - `function deposit() external payable`
 - `function userBalance (address user) public view returns (uint256)`
 
-
 Modify `src/00-template_sttacker.sol` to successfully pass the test found in `test/00-poc.sol` to prove the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
-
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -74,7 +73,6 @@ forge test --match-path test/00-poc.sol -vvv # If you add a fourth v (-vvvv) you
 
 Here we have a basic ERC-721 implementation that exposes just one relevant function:
 - `function mint() external payable`
-
 
 Modify `src/01-template_attacker.sol` to successfully pass the test found in `test/01-poc.sol` to prove the success of your attack. 
 
@@ -99,23 +97,6 @@ forge test --match-path test/02-poc.sol -vvv # If you add a fourth v (-vvvv) you
 ```
 
 
-### 02_b Basic reentrancy with a twist
-
-This example is a simplified implementation of a tokenized vault, which increases the user shares when eth is locked in the contract. It exposes the following functions:
-- `function deposit() external payable`
-- `function withdraw(uint256 amount) external`
-- `function stake(uint256 amount) external returns (uint256)`
-- `function unstake(uint256 amount) external returns (uint256)`
-
-
-Modify `src/02-template_attacker_b.sol` to successfully pass the test found in `test/02-poc_b.sol` to prove the success of your attack. 
-
-:computer: Use the following line to run the test and check the success of your proof of concept:
-```sh
-forge test --match-path test/02-poc_b.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
-```
-
-
 ### 03 Cross-contract reentrancy
 
 The idea is similar to the previous one, however, instead of book-keeping each deposited eth a stEth ERC-20 token is minted. Also... every function is `nonReentrant`.
@@ -134,7 +115,38 @@ forge test --match-path test/03-poc.sol -vvv # If you add a fourth v (-vvvv) you
 ```
 
 
-### 04 Read-only reentrancy
+### 04_1 Basic reentrancy subtracting
+
+This example is a simplified vault, which allows the user with the highest deposit to be flagged as King. It exposes the following functions:
+- `function deposit() external payable`
+- `function withdraw(uint256 amount) external`
+- `function claimKing() external returns (bool)`
+
+Modify `src/04_1-template_attacker.sol` to successfully pass the test found in `test/04_1-poc.sol` to prove the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
+```sh
+forge test --match-path test/04_1-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
+```
+
+
+### 04_1 Basic reentrancy subtracting, more comlex
+
+This example is a simplified implementation of a tokenized vault, which increases the user shares when eth is locked in the contract. It exposes the following functions:
+- `function deposit() external payable`
+- `function withdraw(uint256 amount) external`
+- `function stake(uint256 amount) external returns (uint256)`
+- `function unstake(uint256 amount) external returns (uint256)`
+
+Modify `src/04_2-template_attacker.sol` to successfully pass the test found in `test/04_2-poc.sol` to prove the success of your attack. 
+
+:computer: Use the following line to run the test and check the success of your proof of concept:
+```sh
+forge test --match-path test/04_2-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
+```
+
+
+### 05 Read-only reentrancy
 
 The last one depicts a Liquidity pool ETH-stETH that is used as a data source by a Lending protocol (check `src/periphery/reader_lender.sol`). Every function is `nonReentrant` and has external interactions in the last place.
 - `function addLiquidity(uint256 stEth_amount, uint256 eth_amount) external payable nonReentrant() returns (uint256)`
@@ -142,10 +154,9 @@ The last one depicts a Liquidity pool ETH-stETH that is used as a data source by
 - `function getSpotPriceStEth(uint256 amount) public view returns (uint256)`
 - `function getSpotPriceEth(uint256 amount) public view returns (uint256)`
 
-
-Modify `src/04-template_attacker.sol` to successfully pass the test found in `test/04-poc.sol` to prove the success of your attack. 
+Modify `src/05-template_attacker.sol` to successfully pass the test found in `test/05-poc.sol` to prove the success of your attack. 
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
-forge test --match-path test/04-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
+forge test --match-path test/05-poc.sol -vvv # If you add a fourth v (-vvvv) you will see the traces for successful tests too, very interesting!
 ```
