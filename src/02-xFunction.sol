@@ -23,7 +23,7 @@ contract Vulnerable is ReentrancyGuard {
 	
 
     // Function without external interaction,  reentrancy safe right??? :D
-    function transferTo(address _recipient, uint _amount) external { // nonReentrant here will mitigate the exploit
+    function transferToInternally(address _recipient, uint _amount) external { // nonReentrant here will mitigate the exploit
         require(balance[msg.sender] >= _amount, "Not enough funds to transfer!");
         balance[msg.sender] -= _amount;
         balance[_recipient] += _amount;     

@@ -21,13 +21,14 @@ contract Vulnerable is ReentrancyGuard {
 	}
 
 
-    function stake() external payable nonReentrant() {
+    function deposit() external payable nonReentrant() {
 		require(msg.value > 0, "Funds not sent!");
 		stEthToken.mint(msg.sender, msg.value);
     }
 
 
-    function unstake() external nonReentrant() {// Last minute fn without security patterns in mind, just relying on the modifier	
+	// Last minute fn without security patterns in mind, just relying on the modifier
+    function withdraw() external nonReentrant() {	
 		uint256 usr_balance = stEthToken.balanceOf(msg.sender);
         require(usr_balance > 0, "No funds available!");
 
@@ -37,4 +38,8 @@ contract Vulnerable is ReentrancyGuard {
         stEthToken.burnAll(msg.sender); // Was it CEI or CIE? Not sure... :P
 	}
 	
+	// No need to use this old fn, now we have ERC20.transfer()!
+    //function transferToInternally(address _recipient, uint _amount) external { 
+    //    ...
+	//}
 }
