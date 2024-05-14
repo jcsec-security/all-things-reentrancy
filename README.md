@@ -48,8 +48,8 @@ You will find one vulnerable contract for each type of reentrancy bug currently 
 - [Token-callback reentrancy](/src/01-tokenCallback.sol/)
 - [Cross-function reentrancy](/src/02-xFunction.sol/)
 - [Cross-contract reentrancy](/src/03-xContract.sol/)
-- [Basic reentrancy subtracting](/src/04-1_subtraction.sol/)
-- [Basic reentrancy subtracting - more complex](/src/04-2_subtraction.sol/)
+- [Basic reentrancy subtracting](/src/04_1-subtraction.sol/) 
+- [Basic reentrancy subtracting - more complex](/src/04_2-subtraction.sol/)
 - [Read only reentrancy](/src/05-readOnly.sol/)
 
 
