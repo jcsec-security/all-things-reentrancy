@@ -27,7 +27,7 @@ contract Vulnerable {
 		// Checks!
 		require(balance[msg.sender] >= amount, "Not enough funds");	
 		// Interactions D: VULNERABLE!!... but exploitable?
-		(bool success, ) = payable(msg.sender).call{value: balance[msg.sender]}("");
+		(bool success, ) = payable(msg.sender).call{value: amount}("");
 		require(success, "Low level call failed");
 		// Effects :(
 		balance[msg.sender] -= amount;	
