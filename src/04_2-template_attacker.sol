@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.13;
 
-import "forge-std/Test.sol"; //debug
-
 interface IVulnerable {
     function deposit() external payable;
 	function withdraw(uint256 amount) external;	
@@ -10,8 +8,8 @@ interface IVulnerable {
     function unstake(uint256 amount) external returns (uint256);
 	function userBalance (address _user) external view returns (uint256);
 	function userStake (address _user) external view returns (uint256);
-    function getValueOfShares(uint256 amount) external pure returns (uint256);
-    function getSharesOfValue(uint256 amount) external pure returns (uint256);
+    function getValueOfShares(uint256 amount) external view returns (uint256);
+    function getSharesOfValue(uint256 amount) external view returns (uint256);
 }
 
 

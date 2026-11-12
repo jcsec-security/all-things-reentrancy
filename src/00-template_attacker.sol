@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 
 interface IVulnerable {
     function withdrawAll() external; // You should be able to exploit this one
-    function withdrawSome(uint256 amount) external; // Can you  exploit this one though? check 02-basic_b for more on this
+    function withdrawSome(uint256 amount) external; // Can you exploit this one though? See exercises 04_1 and 04_2 for more on subtraction.
     function deposit() external payable;
 }
 

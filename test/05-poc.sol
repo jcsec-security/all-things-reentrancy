@@ -47,7 +47,7 @@ contract ProofOfConcept is Test {
         stEth.mint(address(victim_reader), 100e18); 
         vm.deal(alice, 1 ether); 
         stEth.mint(alice, 1e18);
-        // Simulare legitimate users's usage
+        // Simulate legitimate users' usage
         vm.prank(alice);
         stEth.approve(address(pool), 1e18);
         vm.prank(alice);
@@ -79,7 +79,7 @@ contract ProofOfConcept is Test {
 
         attacker.exploit();  
         
-        // Conditions to fullfill
+        // Conditions to fulfill
         assertEq(stEth.balanceOf(address(attacker)), 3e18);
         assertEq(address(attacker).balance, 1483333333333333334); 
 
@@ -101,6 +101,13 @@ contract ProofOfConcept is Test {
     function toEth(uint256 _wei) internal pure returns (string memory) {
         string memory eth = vm.toString(_wei / 1 ether);
         string memory decs = vm.toString(_wei % 1 ether);
+
+        // Keep fractional ETH at 18 decimal places (except exact whole ETH).
+        if (_wei % 1 ether != 0) {
+            while (bytes(decs).length < 18) {
+                decs = string.concat("0", decs);
+            }
+        }
 
         string memory result = string.concat(
             string.concat(eth, "."),

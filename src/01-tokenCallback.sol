@@ -18,7 +18,7 @@ contract Vulnerable is ERC721, ERC721Enumerable {
 		// Checks		
 		require(!hasMinted[msg.sender], "Only one NFT per address");
 		require(totalSupply() < 10, "All NFTs minted!");
-		// _safeMint() perfoms a callback to the recipient's onERC721Received function ==> INTERACTION!!!
+		// _safeMint() performs a callback to a contract recipient's onERC721Received function ==> INTERACTION!!!
         uint256 tokenId = _nextTokenId++;		
 		_safeMint(msg.sender, tokenId);
 		// Effects

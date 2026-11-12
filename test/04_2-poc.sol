@@ -33,7 +33,7 @@ contract ProofOfConcept is Test {
         vm.deal(bob, USR_PARTICIPATION);
         vm.deal(charles, USR_PARTICIPATION);   
 
-        // Simulare legitimate users's usage
+        // Simulate legitimate users' usage
         vm.prank(alice);
         victim.deposit{value: USR_PARTICIPATION}();
         vm.prank(alice);
@@ -74,7 +74,7 @@ contract ProofOfConcept is Test {
         vm.roll(11);
         attacker.getTheMoney();
 
-        // Conditions to fullfill - leaving just 1 wei sitting in the contract after finishing the reentrancy step
+        // Conditions to fulfill - leaving just 1 wei sitting in the contract after finishing the reentrancy step
         assertEq(address(attacker).balance, 40999999999999999959);
         assertEq(address(victim).balance, 41); // You can drain the contract even more if you deposit more than 1 eth :)
 
@@ -89,9 +89,9 @@ contract ProofOfConcept is Test {
         string memory eth = vm.toString(_wei / 1 ether);
         string memory decs = vm.toString(_wei % 1 ether);
 
-        if ((bytes(decs).length < 17) && (_wei%1 ether != 0)) {
-            uint256 n_zeros = 17 - bytes(decs).length;
-            for (uint i = 0; i < n_zeros; i++) {
+        // Keep fractional ETH at 18 decimal places (except exact whole ETH).
+        if (_wei % 1 ether != 0) {
+            while (bytes(decs).length < 18) {
                 decs = string.concat("0", decs);
             }
         }

@@ -53,7 +53,7 @@ contract ProofOfConcept is Test {
         
         actor_A.exploit();
         
-        // Conditions to fullfill
+        // Conditions to fulfill
         assertEq(address(victim).balance, 0);
         assertEq(address(actor_A).balance + address(actor_B).balance, 12 ether);
 
@@ -67,6 +67,13 @@ contract ProofOfConcept is Test {
     function toEth(uint256 _wei) internal pure returns (string memory) {
         string memory eth = vm.toString(_wei / 1 ether);
         string memory decs = vm.toString(_wei % 1 ether);
+
+        // Keep fractional ETH at 18 decimal places (except exact whole ETH).
+        if (_wei % 1 ether != 0) {
+            while (bytes(decs).length < 18) {
+                decs = string.concat("0", decs);
+            }
+        }
 
         string memory result = string.concat(
             string.concat(eth, "."),

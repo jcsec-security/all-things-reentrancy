@@ -44,8 +44,8 @@ contract VulnerableLiquidityPool is ReentrancyGuard {
 
         /*
         Check if the ratio of tokens supplied is proportional
-        to reserve ratio to satisfy x * y = k for price to not
-        change if both reserves are greater than 0
+        to the reserve ratio so the price does not change.
+        This check runs if either reserve is greater than 0.
         */
 
         uint256 stEth_reserve = stEth.balanceOf(address(this)) - stEth_amount;
@@ -59,10 +59,9 @@ contract VulnerableLiquidityPool is ReentrancyGuard {
         }
 
         /*
-        Calculate number of liquidity shares to mint using
-        the geometric mean as a measure of liquidity. Increase
-        in liquidity is proportional to increase in shares
-        minted.
+        Calculate initial liquidity shares using the geometric mean.
+        For subsequent deposits, the increase in liquidity is
+        proportional to the increase in shares minted.
         > S = (dx / x) * TL
         > S = (dy / y) * TL
         NOTE: Amount of liquidity shares minted formula is similar

@@ -32,7 +32,7 @@ contract ProofOfConcept is Test {
         vm.deal(bob, 2 ether);
         vm.deal(charles, 3 ether);   
 
-        // Simulare legitimate users's usage
+        // Simulate legitimate users' usage
         vm.prank(alice);
         victim.deposit{value: 1 ether}();
         vm.prank(alice);
@@ -63,7 +63,7 @@ contract ProofOfConcept is Test {
 
         attacker.exploit();
 
-        // Conditions to fullfill
+        // Conditions to fulfill
         assertEq(victim.whoIsTheKing().addr, address(attacker));
 
         console.log("--------------------------------------------------------"); 
@@ -80,9 +80,9 @@ contract ProofOfConcept is Test {
         string memory eth = vm.toString(_wei / 1 ether);
         string memory decs = vm.toString(_wei % 1 ether);
 
-        if ((bytes(decs).length < 17) && (_wei%1 ether != 0)) {
-            uint256 n_zeros = 17 - bytes(decs).length;
-            for (uint i = 0; i < n_zeros; i++) {
+        // Keep fractional ETH at 18 decimal places (except exact whole ETH).
+        if (_wei % 1 ether != 0) {
+            while (bytes(decs).length < 18) {
                 decs = string.concat("0", decs);
             }
         }

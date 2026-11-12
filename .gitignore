@@ -13,7 +13,5 @@ docs/
 # Dotenv file
 .env
 
-# Libs
-lib/*
-
+# Optional editor remappings (Foundry uses foundry.toml)
 remappings.txt
