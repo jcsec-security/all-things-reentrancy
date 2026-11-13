@@ -27,7 +27,7 @@ contract ReaderLender is ReentrancyGuard () {
 
 	constructor(address token_address, address _pool) {
 		stEthToken = IERC20(token_address);
-		pool = ILiquidityPool(_pool); // Is this a trusted source? will it have vulnerabilities?
+		pool = ILiquidityPool(_pool); // Collateral pricing depends on this pool's accounting consistency.
 	}	
 
 	function borrowStEth(uint256 amount) external payable {

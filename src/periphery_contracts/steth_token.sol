@@ -6,7 +6,8 @@ import "openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.so
 import "openzeppelin-contracts/contracts/access/AccessControl.sol";
 
 
-contract SyntheticETH is ERC20, ERC20Burnable, AccessControl { // TODO turn into StETH
+// Workshop mock token, not Lido's stETH implementation.
+contract SyntheticETH is ERC20, ERC20Burnable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");    
 

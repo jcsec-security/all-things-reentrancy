@@ -11,7 +11,7 @@ contract Vulnerable is ReentrancyGuard {
         balance[msg.sender] += msg.value;
     }
 
-    // The dev added the below Fn last minute without security patterns in mind, just relying on the modifier
+    // The guard covers protected entry points, not every function that shares balance.
     function withdraw() external nonReentrant() {		
         require(balance[msg.sender] > 0, "No funds available!");
 
@@ -22,8 +22,8 @@ contract Vulnerable is ReentrancyGuard {
     }
 	
 
-    // Function without external interaction,  reentrancy safe right??? :D
-    function transferToInternally(address _recipient, uint _amount) external { // nonReentrant here will mitigate the exploit
+    // No external call here, but this still changes the accounting used by withdraw()!
+    function transferToInternally(address _recipient, uint _amount) external {
         require(balance[msg.sender] >= _amount, "Not enough funds to transfer!");
         balance[msg.sender] -= _amount;
         balance[_recipient] += _amount;     

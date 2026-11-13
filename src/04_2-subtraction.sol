@@ -2,13 +2,14 @@
 pragma solidity ^0.8.13;
 
 
+// Deliberately simplified custom share vault; not an ERC-4626 implementation.
 contract Vulnerable_ERC4626 {
 
 	uint256 public constant MIN_BLOCKS_PASSED = 10;
 
-    mapping (address => uint256) balance;
-    mapping (address => uint256) user_stake;
-    // user -> timestamp in blocks
+    mapping (address => uint256) balance; // Credited ETH (wei).
+    mapping (address => uint256) user_stake; // Staked shares.
+    // user -> block number of latest stake
     mapping (address => uint256) latests_stake;
     uint256 total_shares;        
 	

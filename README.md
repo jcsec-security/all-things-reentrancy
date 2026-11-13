@@ -79,14 +79,14 @@ Compiler and lint warnings about incomplete templates or intentionally vulnerabl
 
 ### 00 Basic reentrancy
 
-This is the most basic type of reentrancy. The victim exposes the following functions:
+Both withdrawal functions send ETH before updating the caller's recorded balance, allowing callbacks to reenter. That does not guarantee the same exploit: Solidity 0.8+ reverts on subtraction underflow in `withdrawSome()`, undoing the withdrawal; an uncaught revert unwinds the whole transaction. The victim exposes:
 
 - `function withdrawAll() external`
 - `function withdrawSome(uint256 amount) external`
 - `function deposit() external payable`
 - `function userBalance(address _user) public view returns (uint256)`
 
-Modify `src/00-template_attacker.sol` to successfully pass the test found in `test/00-poc.sol` to prove the success of your attack. Play around with both withdraw functions to understand why one of them is directly exploitable and not the other! Are you able to showcase an exploit scenario for both cases?
+Modify `src/00-template_attacker.sol` to successfully pass the test found in `test/00-poc.sol` to prove the success of your attack. Play around with both withdrawal functions: when can reentry produce a profitable or otherwise lasting impact?
 
 :computer: Use the following line to run the test and check the success of your proof of concept:
 ```sh
@@ -110,7 +110,7 @@ forge test --match-path test/01-poc.sol -vvv # If you add a fourth v (-vvvv) you
 
 ### 02 Cross-function reentrancy
 
-The target contract is very similar to example `00`, however, the vulnerable function is now marked as `nonReentrant`. A new feature to move funds has also been added!
+As in `00`, `withdraw()` sends ETH before updating balances. Here, `nonReentrant` blocks nested calls to functions sharing this contract's guard, however, a new entry-point to move funds has been added!
 
 - `function deposit() external payable`
 - `function withdraw() external nonReentrant()`
@@ -126,13 +126,10 @@ forge test --match-path test/02-poc.sol -vvv # If you add a fourth v (-vvvv) you
 
 ### 03 Cross-contract reentrancy
 
-The idea is similar to the previous one, but instead of bookkeeping each deposited ETH, a synthetic ETH ERC-20 token is minted. Both `deposit()` and `withdraw()` are `nonReentrant`.
+Here, deposits mint `SyntheticETH`, a workshop mock ERC-20 representing withdrawal entitlement, not Lido's stETH. Both `deposit()` and `withdraw()` are `nonReentrant`, and the auxiliary token contract includes and additional `burnAll(address from)` function that allows an account with `BURNER_ROLE` to burn a user's entire balance.
 
 - `function deposit() external payable nonReentrant()`
 - `function withdraw() external nonReentrant()`
-
-
-The auxiliary token contract includes a `burnAll(address from)` function that allows an account with `BURNER_ROLE` to burn a user's entire balance.
 
 
 Modify `src/03-template_attacker.sol` to successfully pass the test found in `test/03-poc.sol` to prove the success of your attack. 
@@ -161,7 +158,7 @@ forge test --match-path test/04_1-poc.sol -vvv # If you add a fourth v (-vvvv) y
 
 ### 04_2 Basic reentrancy with subtraction, more complex
 
-This example is a simplified share-based vault. Deposits credit a user's balance; staking converts that balance into shares. Its main functions are:
+Despite its name, `Vulnerable_ERC4626` is a deliberately simplified custom share-based vault, not an ERC-4626 implementation. Deposits credit ETH balances; staking converts credits into shares. Its main functions are:
 
 - `function deposit() external payable`
 - `function withdraw(uint256 amount) external`
@@ -178,9 +175,7 @@ forge test --match-path test/04_2-poc.sol -vvv # If you add a fourth v (-vvvv) y
 
 ### 05 Read-only reentrancy
 
-The last example depicts an ETH-stETH liquidity pool used as a price source by a lending protocol (see [reader_lender.sol](src/periphery_contracts/reader_lender.sol)). The stETH used here is the workshop's synthetic ETH token. Only the pool's `addLiquidity()` and `removeLiquidity()` functions have the `nonReentrant` modifier; its price getters and the lender's `borrowStEth()` and `repay()` do not.
-
-External interactions do not all happen last: `addLiquidity()` transfers stETH in before checking the supplied ETH and reserve ratio, then mints LP tokens. `removeLiquidity()` burns LP tokens, sends ETH, and then transfers stETH.
+This ETH-stETH pool supplies spot prices to a [lending protocol](src/periphery_contracts/reader_lender.sol). Its stETH is the workshop mock. `nonReentrant` protects `addLiquidity()` and `removeLiquidity()`.
 
 - `function addLiquidity(uint256 stEth_amount, uint256 eth_amount) external payable nonReentrant() returns (uint256)`
 - `function removeLiquidity(uint256 lp_amount) external nonReentrant() returns (uint256, uint256)`
