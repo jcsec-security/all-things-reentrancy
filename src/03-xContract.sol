@@ -27,7 +27,6 @@ contract Vulnerable is ReentrancyGuard {
     }
 
 
-	// This guard does not lock the separate token contract's balances.
     function withdraw() external nonReentrant() {	
 		uint256 usr_balance = stEthToken.balanceOf(msg.sender);
         require(usr_balance > 0, "No funds available!");

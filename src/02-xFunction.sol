@@ -11,18 +11,18 @@ contract Vulnerable is ReentrancyGuard {
         balance[msg.sender] += msg.value;
     }
 
-    // The guard covers protected entry points, not every function that shares balance.
+    // Is the reentrancy guard enough?
     function withdraw() external nonReentrant() {		
         require(balance[msg.sender] > 0, "No funds available!");
 
         (bool success, ) = payable(msg.sender).call{value: balance[msg.sender]}("");
         require(success, "Transfer failed" );
 
-        balance[msg.sender] = 0; // Was it CEI or CIE? Not sure... :P
+        balance[msg.sender] = 0;
     }
 	
 
-    // No external call here, but this still changes the accounting used by withdraw()!
+    // No external calls here. Safe from reentrancy?
     function transferToInternally(address _recipient, uint _amount) external {
         require(balance[msg.sender] >= _amount, "Not enough funds to transfer!");
         balance[msg.sender] -= _amount;

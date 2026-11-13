@@ -79,7 +79,9 @@ Compiler and lint warnings about incomplete templates or intentionally vulnerabl
 
 ### 00 Basic reentrancy
 
-Both withdrawal functions send ETH before updating the caller's recorded balance, allowing callbacks to reenter. That does not guarantee the same exploit: Solidity 0.8+ reverts on subtraction underflow in `withdrawSome()`, undoing the withdrawal; an uncaught revert unwinds the whole transaction. The victim exposes:
+Both withdrawal functions send ETH before updating the caller's recorded balance. Are they equally exploitable?
+
+The victim exposes:
 
 - `function withdrawAll() external`
 - `function withdrawSome(uint256 amount) external`
@@ -126,7 +128,7 @@ forge test --match-path test/02-poc.sol -vvv # If you add a fourth v (-vvvv) you
 
 ### 03 Cross-contract reentrancy
 
-Here, deposits mint `SyntheticETH`, a workshop mock ERC-20 representing withdrawal entitlement, not Lido's stETH. Both `deposit()` and `withdraw()` are `nonReentrant`, and the auxiliary token contract includes and additional `burnAll(address from)` function that allows an account with `BURNER_ROLE` to burn a user's entire balance.
+Here, deposits mint `SyntheticETH`, a workshop mock ERC-20 representing withdrawal entitlement, not Lido's stETH. Both `deposit()` and `withdraw()` are `nonReentrant`, and the auxiliary token contract includes an additional `burnAll(address from)` function that allows an account with `BURNER_ROLE` to burn a user's entire balance.
 
 - `function deposit() external payable nonReentrant()`
 - `function withdraw() external nonReentrant()`
